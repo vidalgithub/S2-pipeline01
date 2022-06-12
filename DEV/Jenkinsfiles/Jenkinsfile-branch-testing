@@ -82,6 +82,7 @@ stage('build ') {
 
             steps {
                sh '''
+               ls -l
                cd DEV
            docker build -t devopseasylearning2021/canary:${BUILD_NUMBER} .
                '''
