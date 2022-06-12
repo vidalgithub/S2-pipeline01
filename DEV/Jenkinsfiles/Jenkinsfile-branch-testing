@@ -40,7 +40,7 @@ pipeline {
                sh '''
                rm -rf ./*
 	       git clone -b $BranchName https://github.com/devopseasylearning/S2-pipeline01.git
-         cd $WORKSPACE
+         cd S2-pipeline01
                '''
             }
         }
@@ -82,7 +82,7 @@ stage('build ') {
 
             steps {
                sh '''
-               cd $WORKSPACE/DEV
+               cd DEV
            docker build -t devopseasylearning2021/canary:${BUILD_NUMBER} .
                '''
             }
