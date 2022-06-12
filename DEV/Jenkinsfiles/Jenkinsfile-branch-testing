@@ -40,7 +40,8 @@ pipeline {
                sh '''
                rm -rf ./*
 	       git clone -b $BranchName https://github.com/devopseasylearning/S2-pipeline01.git
-         cd S2-pipeline01
+         mv  S2-pipeline01/* .
+         rm -rf S2-pipeline01
                '''
             }
         }
@@ -130,22 +131,24 @@ docker-compose ps
    post {
    
    success {
-      slackSend (channel: '#development-alerts', color: 'good', message: "SUCCESSFUL: CANARY Branch name  <<${env.BRANCH_NAME}>>  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      slackSend (channel: '#development-alerts', color: 'good', message: "SUCCESSFUL: Application CANARY the Branch tested is  $BranchName Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
 
  
     unstable {
-      slackSend (channel: '#development-alerts', color: 'warning', message: "UNSTABLE: CANARY Branch name  <<${env.BRANCH_NAME}>>  Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      slackSend (channel: '#development-alerts', color: 'warning', message: "UNSTABLE: Application CANARY the Branch tested is  $BranchName Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
 
     failure {
-      slackSend (channel: '#development-alerts', color: '#FF0000', message: "FAILURE:  CANARY Branch name  <<${env.BRANCH_NAME}>> Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      slackSend (channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Application CANARY the Branch tested is  $BranchNameJob '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
    
     cleanup {
       deleteDir()
     }
 }
+
+
 
 
     
