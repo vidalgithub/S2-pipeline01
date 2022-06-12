@@ -32,18 +32,18 @@ pipeline {
 
           stage("Quality Gate") {
             steps {
-              timeout(time: 0.05, unit: 'HOURS') {
+              timeout(time: 3, unit: 'MINUTES') {
                 waitForQualityGate abortPipeline: true
               }
             }
           }
      
-     
+
 stage('build ') {
 
             steps {
                sh '''
-               cd WORKSPACE
+               cd $WORKSPACE
            docker build -t devopseasylearning2021/canary:${BUILD_NUMBER} .
                '''
             }
