@@ -76,7 +76,7 @@ stage('checking ') {
        
 
 
-    stage('tagging') {
+    stage('tagging & push') {
             steps {
                sh '''
 echo  '[url "git@github.com:"]' >> ~/.gitconfig 
