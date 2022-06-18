@@ -1,0 +1,131 @@
+pipeline {
+    agent { 
+        label 'node1'
+         }
+   
+  
+    options { buildDiscarder(logRotator(artifactDaysToKeepStr: '',
+     artifactNumToKeepStr: '', daysToKeepStr: '3', numToKeepStr: '5'))
+      disableConcurrentBuilds() }
+      
+       environment {
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+	}
+
+
+    stages {
+
+       stage('Setup parameters') {
+            steps {
+                script { 
+                    properties([
+                        parameters([
+                           string(
+                                defaultValue: 'main', 
+                                name: 'BranchName', 
+                                description: 'Enter the branch to tag',
+                                trim: true
+                            ), 
+
+                            string(
+                                defaultValue: 'v1.0.0', 
+                                name: 'TAG', 
+                                description: 'Enter the tag value starting with v',
+                                trim: true
+                            )
+                            
+                        ])
+                    ])
+                }
+            }
+        }
+
+
+ stage(' cloning') {
+   
+
+            steps {
+               sh '''
+               rm -rf ./*
+	       git clone -b $BranchName https://github.com/devopseasylearning/S2-pipeline01.git
+         mv  S2-pipeline01/* .
+         rm -rf S2-pipeline01
+               '''
+            }
+        }
+
+
+
+
+
+
+
+stage('checking ') {
+
+            steps {
+               sh '''
+              echo "checking if the tag is correct"
+              echo ${TAG} > file.txt
+              bash -x DEV/check.sh
+               '''
+            }
+        }
+       
+
+
+    stage('tagging') {
+            steps {
+               sh '''
+git tag -a $TAG -m "Tag generated from jenkins"
+git tag
+                '''
+            }
+        }
+
+    stage('Pushing tag') {
+            steps {
+               sh '''
+git push origin $TAG
+                '''
+            }
+        }
+
+
+
+
+    }
+            
+
+   post {
+   
+   success {
+      slackSend (channel: '#development-alerts', color: 'good', message: "SUCCESSFUL:\n Application CANARY\n  New tag: $TAG\n  ")
+    }
+
+ 
+    unstable {
+      slackSend (channel: '#development-alerts', color: 'warning', message: "UNSTABLE: Application CANARY\n Reason: Fail to push new tag, please investigate")
+    }
+
+    failure {
+      slackSend (channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Application CANARY\n Reason: Fail to push new tag, please investigate")
+    }
+   
+    cleanup {
+      deleteDir()
+    }
+}
+
+
+
+
+    
+
+
+
+    }
+
+
+
+
+
