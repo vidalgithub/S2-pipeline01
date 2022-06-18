@@ -47,7 +47,7 @@ pipeline {
             steps {
                sh '''
                rm -rf ./*
-	       git clone -b $BranchName https://github.com/devopseasylearning/S2-pipeline01.git
+	       git clone -b $BranchName git@github.com:devopseasylearning/S2-pipeline01.git
          mv  S2-pipeline01/* .
          rm -rf S2-pipeline01
                '''
