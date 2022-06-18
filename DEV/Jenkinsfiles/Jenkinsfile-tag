@@ -77,6 +77,8 @@ stage('checking ') {
     stage('tagging') {
             steps {
                sh '''
+ git config --global user.email "info@devopseasylearning.com"
+  git config --global user.name "devopseasylearning.com"
 git tag -a $TAG -m "Tag generated from jenkins"
 git tag
                 '''
