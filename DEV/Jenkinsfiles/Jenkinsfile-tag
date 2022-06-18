@@ -64,10 +64,10 @@ stage('checking ') {
 
             steps {
                sh '''
-               rm -rf DEV/file.txt || true 
-              echo ${TAG} > DEV/file.txt
+               cd DEV 
+              echo ${TAG} > file.txt
               ls -l 
-              bash -x DEV/check.sh
+              bash -x check.sh
                '''
             }
         }
