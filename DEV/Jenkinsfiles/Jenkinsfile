@@ -93,7 +93,9 @@ stage('build ') {
        
 
       stage('Docker Login') {
-
+               agent {
+  label "jenkins-node"
+    }
 			steps {
 				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 			}
@@ -103,6 +105,9 @@ stage('build ') {
             
 
      stage('Docker push ') {
+                agent {
+  label "jenkins-node"
+    }
             steps {
                sh '''
               docker push devopseasylearning2021/canary-dev:$COMMIT 
