@@ -64,8 +64,8 @@ stage('checking ') {
 
             steps {
                sh '''
-               rm -rf file.txt || true 
-              echo ${TAG} > file.txt
+               rm -rf DEV/file.txt || true 
+              echo ${TAG} > DEV/file.txt
               ls -l 
               bash -x DEV/check.sh
                '''
