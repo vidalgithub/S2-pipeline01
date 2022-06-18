@@ -110,6 +110,7 @@ stage('build ') {
     }
             steps {
                sh '''
+               COMMIT=`git rev-parse --short=5 HEAD`
              docker push  devopseasylearning2021/canary-dev:$COMMIT 
                 '''
             }
