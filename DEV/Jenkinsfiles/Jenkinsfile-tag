@@ -48,7 +48,7 @@ pipeline {
                sh '''
                rm -rf ./*
 	       git clone -b $BranchName git@github.com:devopseasylearning/S2-pipeline01.git
-         cd S2-pipeline01
+         cd S2-pipeline01/DEV
                '''
             }
         }
@@ -63,7 +63,7 @@ stage('checking ') {
 
             steps {
                sh '''
-               cd DEV 
+   
               echo ${TAG} > file.txt
               ls -l 
               bash -x check.sh
