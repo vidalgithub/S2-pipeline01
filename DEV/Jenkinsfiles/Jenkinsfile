@@ -22,7 +22,7 @@ pipeline {
                     properties([
                         parameters([
                             string(name: 'WARNTIME',
-                             defaultValue: '2',
+                             defaultValue: '0',
                             description: '''Warning time (in minutes) before starting upgrade'''),
 
                              
