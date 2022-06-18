@@ -65,10 +65,11 @@ stage('checking ') {
 
             steps {
                sh '''
-   
+            cd S2-pipeline01/DEV
               echo ${TAG} > file.txt
               ls -l 
               bash -x check.sh
+              rm -rf file.txt 
                '''
             }
         }
