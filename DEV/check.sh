@@ -1,5 +1,7 @@
 #! /bin/bash
 # Checking if file.txt is a file
+
+
 if 
 [[ -s file.txt ]]
 then 
@@ -23,6 +25,17 @@ fi
 # checking if file.txt size is greater than 0 
 
 TAG=$(cat file.txt) 
+
+GIT=$(git tag | grep -w $TAG )
+
+if 
+[[ ${GIT} == $TAG ]]
+then 
+echo "The tag exist"
+exit 1
+fi 
+
+
 
 if [[ ${TAG::1} == "v" ]]
 then
