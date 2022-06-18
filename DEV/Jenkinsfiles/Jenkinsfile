@@ -116,6 +116,20 @@ stage('build ') {
             }
         }
 
+
+
+
+         stage('Docker push ') {
+                agent {
+  label 'node1 || node2 || node3 || node4 || node5'
+    }
+            steps {
+               sh '''
+            bash -x update-charts.sh
+                '''
+            }
+        }
+
     }        
 
      post {
