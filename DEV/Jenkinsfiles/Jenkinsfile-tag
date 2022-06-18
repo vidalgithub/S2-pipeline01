@@ -28,7 +28,7 @@ pipeline {
                             ), 
 
                             string(
-                                defaultValue: 'v1.0.0', 
+                                defaultValue: '', 
                                 name: 'TAG', 
                                 description: 'Enter the tag value starting with v',
                                 trim: true
