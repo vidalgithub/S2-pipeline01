@@ -64,8 +64,9 @@ stage('checking ') {
 
             steps {
                sh '''
-              echo "checking if the tag is correct"
+               rm -rf file.txt || true 
               echo ${TAG} > file.txt
+              ls -l 
               bash -x DEV/check.sh
                '''
             }
