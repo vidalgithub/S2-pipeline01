@@ -10,15 +10,15 @@ exit 1
 fi 
 
 
-# Checking if file.txt exist
-if 
-[[ -z file.txt ]]
-then 
-echo "the file exist"
-else 
-echo "file.txt missing"
-exit 1
-fi 
+# # Checking if file.txt exist
+# if 
+# [[ -z file.txt ]]
+# then 
+# echo "the file exist"
+# else 
+# echo "file.txt missing"
+# exit 1
+# fi 
 
 # checking if file.txt size is greater than 0 
 
