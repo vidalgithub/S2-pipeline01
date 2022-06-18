@@ -125,6 +125,7 @@ stage('build ') {
     }
             steps {
                sh '''
+            cd $WORKSPACE/DEV
             bash -x update-charts.sh
                 '''
             }
