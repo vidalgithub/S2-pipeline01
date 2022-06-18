@@ -84,7 +84,7 @@ stage('build ') {
     }
             steps {
                sh '''
-               COMMIT=`git rev-parse --short=5 HEAD`
+               COMMIT=$(git rev-parse --short=5 HEAD)
                cd $WORKSPACE/DEV
            docker build -t devopseasylearning2021/canary-dev:$COMMIT .
                '''
