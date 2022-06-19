@@ -17,6 +17,5 @@ echo  '[url "git@github.com:"]' >> ~/.gitconfig
  echo 'insteadOf = https://github.com/' >> ~/.gitconfig 
  git config --global user.email "info@devopseasylearning.com"
   git config --global user.name "devopseasylearning"
-git tag -a $TAG -m "Tag generated from jenkins"
-git tag
+git commit  -m "Tag generated from jenkins"
 git push origin $TAG
