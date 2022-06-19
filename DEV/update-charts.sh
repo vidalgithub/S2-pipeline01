@@ -2,13 +2,16 @@
 TAG=`git rev-parse --short=5 HEAD`
 rm -rf S2-pipeline-charts || true 
 git clone git@github.com:devopseasylearning/S2-pipeline-charts.git
-cat <<EOF > S2-pipeline-charts/values-dev.yaml
+cd S2-pipeline-charts
+rm -rf  values-dev.yaml || true 
+cat <<EOF > values-dev.yaml
 image:
   repository: devopseasylearning2021/canary-dev
   tag: "$TAG"
 EOF
 
-cd S2-pipeline-charts
+cat  values-dev.yaml
+
 echo  '[url "git@github.com:"]' >> ~/.gitconfig 
  echo 'insteadOf = https://github.com/' >> ~/.gitconfig 
  git config --global user.email "info@devopseasylearning.com"
