@@ -2,7 +2,8 @@
 TAG=`git rev-parse --short=5 HEAD`
 rm -rf S2-pipeline-charts || true 
 git clone git@github.com:devopseasylearning/S2-pipeline-charts.git
-cd S2-pipeline-charts
+cd S2-pipeline-charts/canary
+ls -l 
 rm -rf  values-dev.yaml || true 
 cat <<EOF > values-dev.yaml
 image:
