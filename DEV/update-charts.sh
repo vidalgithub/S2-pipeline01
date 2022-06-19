@@ -18,5 +18,5 @@ echo  '[url "git@github.com:"]' >> ~/.gitconfig
  git config --global user.email "info@devopseasylearning.com"
   git config --global user.name "devopseasylearning"
   git add -A
-git commit  -m "Tag generated from jenkins"
+git commit -m "Tag generated from jenkins"
 git push 
