@@ -9,6 +9,8 @@ cat <<EOF > values-dev.yaml
 image:
   repository: devopseasylearning2021/canary-dev
   tag: "$TAG"
+service:
+  type: LoadBalancer
 EOF
 
 cat  values-dev.yaml
