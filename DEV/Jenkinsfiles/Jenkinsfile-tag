@@ -103,8 +103,6 @@ git push origin $TAG
 
             steps {
                sh '''
-
-               cd $WORKSPACE/DEV
            docker build -t devopseasylearning2021/canary-prod:$TAG .
                '''
             }
