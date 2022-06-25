@@ -90,16 +90,37 @@ git push origin $TAG
             }
         }
 
-//     stage('Pushing tag') {
-//             steps {
-//                sh '''
-// git push origin $TAG
-//                 '''
-//             }
-//         }
+      stage('Docker Login') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+           
+        
+    stage('build ') {
+
+            steps {
+               sh '''
+
+               cd $WORKSPACE/DEV
+           docker build -t devopseasylearning2021/canary-prod:$TAG .
+               '''
+            }
+        }
 
 
 
+       stage('Docker push ') {
+
+            steps {
+               sh '''
+
+             docker push  devopseasylearning2021/canary-prod:$TAG 
+                '''
+            }
+        }
 
     }
             
