@@ -85,7 +85,7 @@ cd S2-pipeline-charts/canary-preprod
 rm -rf  values-preprod.yaml || true 
 cat <<EOF > values-preprod.yaml
 image:
-  repository: devopseasylearning2021/canary-dev
+  repository: devopseasylearning2021/canary-prod
   tag: "$TAG"
 service:
   type: LoadBalancer
