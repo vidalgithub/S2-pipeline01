@@ -13,7 +13,7 @@ pipeline {
                 '''
             }
         }
-
+/*
                stage('Login') {
 
 			steps {
@@ -22,7 +22,7 @@ pipeline {
         '''
 			}
 		}
-
+*/
         stage('Hello') {
             steps {
                 sh '''
