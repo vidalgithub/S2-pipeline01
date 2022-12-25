@@ -64,7 +64,7 @@ pipeline {
         scannerHome='/opt/sonar-scanner'
     }
             steps{
-                withSonarQubeEnv('sonarqube-kemgou') {
+                withSonarQubeEnv('sonar-kemgou') {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
