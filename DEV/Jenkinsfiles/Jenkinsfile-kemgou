@@ -1,0 +1,94 @@
+pipeline {
+    agent {
+                label ("node2")
+            }
+
+    stages {
+
+        stage('Login') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+        stage('Hello') {
+            steps {
+                sh '''
+                ls 
+                pwd
+                '''
+            }
+        }
+        
+        
+        stage(' cloning') {
+   
+
+            steps {
+               sh '''
+               rm -rf ./*
+	       git clone -b $BranchName https://github.com/vidalgithub/S2-pipeline01.git
+         mv  S2-pipeline01/* .
+         rm -rf S2-pipeline01
+               '''
+            }
+        }
+
+
+       stage('SonarQube analysis') {
+            agent {
+                docker {
+
+                  image 'sonarsource/sonar-scanner-cli:4.7.0'
+                }
+               }
+               environment {
+        CI = 'true'
+        scannerHome='/opt/sonar-scanner'
+    }
+            steps{
+                withSonarQubeEnv('sonar-kemgou') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+
+
+          stage("Quality Gate") {
+            steps {
+              timeout(time: 10, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }
+
+           stage('maven') {
+	 agent {
+            docker {
+
+              image 'maven:latest'
+            }
+           }
+            steps {
+                sh '''
+                ls 
+                pwd
+                '''
+            }
+        }
+
+  }
+
+post {
+    
+    success {
+      slackSend (channel: '#development-alerts', color: 'good', message: "Images  have been pushed to Nexus")
+    }
+
+    failure {
+      slackSend (channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Images  have NOT been pushed to Nexus")
+    }
+}
+
+}
