@@ -4,6 +4,15 @@ pipeline {
             }
 
     stages {
+    
+     stage('Hello') {
+            steps {
+                sh '''
+                ls 
+                pwd
+                '''
+            }
+        }
 
         stage('Login') {
 
