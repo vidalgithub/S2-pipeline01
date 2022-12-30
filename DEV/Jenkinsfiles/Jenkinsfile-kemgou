@@ -1,38 +1,39 @@
 pipeline {
-    agent {
-                label ("node2")
-            }
+    agent { 
+        label 'node1 || node2 || node3 || jenkins-node'
+         }
+   
+  
+    options { buildDiscarder(logRotator(artifactDaysToKeepStr: '',
+     artifactNumToKeepStr: '', daysToKeepStr: '3', numToKeepStr: '5'))
+      disableConcurrentBuilds() }
+      
+       environment {
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+	}
+
 
     stages {
-    
-     stage('Start') {
-            steps {
-                sh '''
-                ls 
-                pwd
-                '''
-            }
-        }
-/*
-               stage('Login') {
 
-			steps {
-				sh '''
-        echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-        '''
-			}
-		}
-*/
-        stage('Hello') {
+       stage('Setup parameters') {
             steps {
-                sh '''
-                ls 
-                pwd
-                '''
+                script { 
+                    properties([
+                        parameters([
+                           string(
+                                defaultValue: 'main', 
+                                name: 'BranchName', 
+                                trim: true
+                            )
+                            
+                        ])
+                    ])
+                }
             }
         }
-        
-        stage(' cloning') {
+
+
+ stage(' cloning') {
    
 
             steps {
@@ -44,6 +45,11 @@ pipeline {
                '''
             }
         }
+
+
+
+
+
 
 
        stage('SonarQube analysis') {
@@ -58,7 +64,7 @@ pipeline {
         scannerHome='/opt/sonar-scanner'
     }
             steps{
-                withSonarQubeEnv('sonar-kemgou') {
+                withSonarQubeEnv('Sonar') {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
@@ -73,32 +79,103 @@ pipeline {
             }
           }
 
-           stage('maven') {
-	 agent {
-            docker {
+stage('build ') {
 
-              image 'maven:latest'
-            }
-           }
             steps {
-                sh '''
-                ls 
-                pwd
+               sh '''
+               ls -l
+               cd DEV
+           docker build -t devopseasylearning2021/canary:kemgou001 .
+	   
+               '''
+            }
+        }
+       
+
+ stage('Docker Login') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+           
+            
+
+     stage('Docker push ') {
+            steps {
+               sh '''
+              docker push devopseasylearning2021/canary:kemgou001 
+                '''
+            }
+        }
+	
+
+
+    stage('Deploy with docker ') {
+            steps {
+               sh '''
+rm -rf docker-compose.yml
+cat <<EOF > docker-compose.yml
+version: "3.3"
+services:
+  canary:
+    image: devopseasylearning2021/canary:kemgou001
+    expose:
+      - 80
+    ports:
+      - "9090:80"
+    hostname: canary
+    container_name: canary
+    restart: always 
+EOF
+
+ls -l 
+cat docker-compose.yml 
+docker-compose up -d
+docker-compose ps 
+
+
+               curl ifconfig.co 
                 '''
             }
         }
 
-  }
 
-post {
-    
-    success {
-      slackSend (channel: '#development-alerts', color: 'good', message: "Images  have been pushed to Nexus")
+
+
+
+    }
+            
+
+   post {
+   
+   success {
+      slackSend (channel: '#development-alerts', color: 'good', message: "SUCCESSFUL: Application CANARY the Branch tested is  $BranchName Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
+
+ 
+    unstable {
+      slackSend (channel: '#development-alerts', color: 'warning', message: "UNSTABLE: Application CANARY the Branch tested is  $BranchName Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
     }
 
     failure {
-      slackSend (channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Images  have NOT been pushed to Nexus")
+      slackSend (channel: '#development-alerts', color: '#FF0000', message: "FAILURE: Application CANARY the Branch tested is  $BranchNameJob '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
+   
+    cleanup {
+      deleteDir()
     }
 }
 
-}
+
+
+
+    
+
+
+
+    }
+
+
+
