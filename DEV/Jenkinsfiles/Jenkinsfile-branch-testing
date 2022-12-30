@@ -9,7 +9,7 @@ pipeline {
       disableConcurrentBuilds() }
       
        environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerhub-del')
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
 	}
 
 
